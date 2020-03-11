@@ -7,11 +7,13 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeService } from './home/home.service';
 import { FormsModule } from '@angular/forms';
+import { PokemonDetailsComponent } from './home/pokemon-details/pokemon-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    PokemonDetailsComponent
   ],
   imports: [
     FormsModule,

@@ -13,4 +13,8 @@ export class HomeService {
   getPokemonByName(pokemonName: string) {
     return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
   }
+
+  getPokemonDetails(pokemonId: string) {
+    return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+  }
 }
