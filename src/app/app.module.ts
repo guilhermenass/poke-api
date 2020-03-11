@@ -1,27 +1,29 @@
+import { PokemonListComponent } from './pokemon-list/pokemon-list.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { HomeService } from './home/home.service';
 import { FormsModule } from '@angular/forms';
-import { PokemonDetailsComponent } from './home/pokemon-details/pokemon-details.component';
+import { PokemonDetailsComponent } from './pokemon-list/pokemon-details/pokemon-details.component';
+import { PokemonService } from './pokemon-list/pokemon-list.service';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    PokemonListComponent,
     PokemonDetailsComponent
   ],
   imports: [
     FormsModule,
     HttpClientModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgxPaginationModule
   ],
-  providers: [HomeService],
+  providers: [PokemonService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

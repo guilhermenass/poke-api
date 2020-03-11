@@ -21,7 +21,7 @@
 <div class="container">
   <div *ngIf="!pokemonNotFound; else noResults" >
     <div class="row col-md-12">
-      <div *ngFor="let pokemon of pokemons" class="col-md-3 p-3">
+      <div *ngFor="let pokemon of pokemons | paginate: { itemsPerPage: 12, currentPage: page, totalItems: totalPokemons }" class="col-md-3 p-3">
         <div class="card pokeapi-card">
           <img class="card-img-top img-fluid pokeapi-image" [src]="pokemon.sprite" alt="Imagem do pokémon">
           <div class="card-body">
@@ -35,13 +35,16 @@
     </div>
   </div>
   <ng-template #noResults>
-    <div class="m-3">
-      <img style="width: 150px" src="../../assets/img/not-found.png">
-      <span>Nenhum resultado encontrado</span>
+    <div class="text-center">
+      <div class="m-3">
+        <img style="width: 150px" src="../../assets/img/not-found.png">
+      </div>
+      <div class="p-3">
+        <span>Nenhum pokémon encontrado com o nome <b>{{pokemonName}}</b></span>
+      </div>
     </div>
   </ng-template>
+  <div class="row">
+    <pagination-controls previousLabel="Anterior" nextLabel="Próxima" (pageChange)="onPageChange($event)"></pagination-controls>
+  </div>
 </div>
-
-
-
-

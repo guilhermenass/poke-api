@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
-export class HomeService {
+export class PokemonService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getAllPokemons() {
-    return this.httpClient.get('https://pokeapi.co/api/v2/pokemon');
+  getAllPokemons(page: number) {
+    return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/?offset=${page}`);
   }
 
   getPokemonByName(pokemonName: string) {

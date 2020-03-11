@@ -1,19 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { HomeService } from './home.service';
 import { Router } from '@angular/router';
+import { PokemonService } from './pokemon-list.service';
 
 @Component({
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  templateUrl: './pokemon-list.component.html',
+  styleUrls: ['./pokemon-list.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class PokemonListComponent implements OnInit {
 
   public pokemons: any[];
   public pokemonNameSearch: string;
   private pokemonSpriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
   public pokemonNotFound: boolean;
+  public pokemonName: string;
+  public page = 1;
+  public totalPokemons: number;
 
-  constructor(private homeService: HomeService, private router: Router) { }
+  constructor(private pokemonService: PokemonService, private router: Router) { }
 
   ngOnInit(): void {
     this.getAllPokemons();
@@ -23,8 +26,9 @@ export class HomeComponent implements OnInit {
    * Método que carrega todos os pokémons sem filtros e com resultados paginados
    */
   getAllPokemons() {
-    this.homeService.getAllPokemons().subscribe(
+    this.pokemonService.getAllPokemons(this.page).subscribe(
       (pokemons: any) => {
+        this.totalPokemons = pokemons.count;
         this.pokemons = pokemons.results.map((pokemon) => ({
           ...pokemon,
           id: this.getPokemonId(pokemon),
@@ -39,7 +43,8 @@ export class HomeComponent implements OnInit {
    */
   onSearch() {
     this.pokemonNotFound = false;
-    this.homeService.getPokemonByName(this.pokemonNameSearch).subscribe(
+    this.pokemonName = this.pokemonNameSearch;
+    this.pokemonService.getPokemonByName(this.pokemonNameSearch).subscribe(
     (pokemon: any) => {
       this.pokemons = [];
       this.pokemons.push({
@@ -63,5 +68,10 @@ export class HomeComponent implements OnInit {
 
   goToDetailsPage(pokemonId: string) {
     this.router.navigate(['details', pokemonId]);
+  }
+
+  onPageChange(event: any) {
+    this.page = event;
+    this.getAllPokemons();
   }
 }
