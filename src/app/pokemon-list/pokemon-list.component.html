@@ -2,7 +2,7 @@
   <div class="mt-2 p-3">
     <form>
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 col-9 col-sm-6">
           <input
             name="pokemonNameSearch"
             type="text"
@@ -10,7 +10,7 @@
             class="form-control"
             placeholder="Digite o nome do pokémon...">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3 col-2 col-sm-6">
           <button type="button" (click)="onSearch()" class="btn btn-outline-danger">Pesquisar</button>
         </div>
       </div>
@@ -21,12 +21,12 @@
 <div class="container">
   <div *ngIf="!pokemonNotFound; else noResults" >
     <div class="row col-md-12">
-      <div *ngFor="let pokemon of pokemons | paginate: { itemsPerPage: 12, currentPage: page, totalItems: totalPokemons }" class="col-md-3 p-3">
+      <div *ngFor="let pokemon of pokemons | paginate: { itemsPerPage: 10, currentPage: page, totalItems: totalPokemons }" class="col-md-4 col-12 col-sm-6 p-3">
         <div class="card pokeapi-card">
           <img class="card-img-top img-fluid pokeapi-image" [src]="pokemon.sprite" alt="Imagem do pokémon">
           <div class="card-body">
             <div class="text-center">
-              <h5 class="card-title">{{pokemon.name}}</h5>
+              <h5 class="card-title">{{pokemon.name | titlecase }}</h5>
               <button type="button" (click)="goToDetailsPage(pokemon.id)" class="btn btn-danger">Ver detalhes</button>
             </div>
           </div>
@@ -44,7 +44,7 @@
       </div>
     </div>
   </ng-template>
-  <div class="row">
+  <div class="row" *ngIf="!pokemonNotFound" >
     <pagination-controls previousLabel="Anterior" nextLabel="Próxima" (pageChange)="onPageChange($event)"></pagination-controls>
   </div>
 </div>

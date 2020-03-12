@@ -7,14 +7,14 @@ export class PokemonService {
   constructor(private httpClient: HttpClient) { }
 
   getAllPokemons(page: number) {
-    return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/?offset=${page}`);
+    return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/?offset=${page}&limit=10`);
   }
 
   getPokemonByName(pokemonName: string) {
     return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
   }
 
-  getPokemonDetails(pokemonId: string) {
+  getPokemonDetails(pokemonId: number) {
     return this.httpClient.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
   }
 }

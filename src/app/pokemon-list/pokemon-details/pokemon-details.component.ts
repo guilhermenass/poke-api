@@ -15,10 +15,10 @@ export class PokemonDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const pokemonId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadPokemonDetails(pokemonId);
+    this.loadPokemonDetails(Number(pokemonId));
   }
 
-  loadPokemonDetails(pokemonId: string) {
+  loadPokemonDetails(pokemonId: number) {
     this.pokemonService.getPokemonDetails(pokemonId).subscribe(
       (pokemonDetails: any) => {
         this.pokemonDetails = pokemonDetails;

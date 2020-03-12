@@ -1,14 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonService } from './pokemon-list.service';
+import { Pokemon } from '../pokemon';
+import { PokemonResponseDto } from '../pokemon-response-dto';
 
 @Component({
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss']
 })
+
+/**
+ * Componente responsável pela tela inicial de busca e visualização dos pokémons
+ */
 export class PokemonListComponent implements OnInit {
 
-  public pokemons: any[];
+  public pokemons: Pokemon[];
   public pokemonNameSearch: string;
   private pokemonSpriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
   public pokemonNotFound: boolean;
@@ -27,25 +33,38 @@ export class PokemonListComponent implements OnInit {
    */
   getAllPokemons() {
     this.pokemonService.getAllPokemons(this.page).subscribe(
-      (pokemons: any) => {
+      (pokemons: PokemonResponseDto) => {
         this.totalPokemons = pokemons.count;
-        this.pokemons = pokemons.results.map((pokemon) => ({
+        this.pokemons = [];
+        this.pokemons = pokemons.results.map((pokemon: Pokemon) => ({
           ...pokemon,
-          id: this.getPokemonId(pokemon),
-          sprite: `${this.pokemonSpriteUrl}/${this.getPokemonId(pokemon)}.png`
+          id: this.getPokemonId(pokemon.url),
+          sprite: `${this.pokemonSpriteUrl}/${this.getPokemonId(pokemon.url)}.png`
         }));
       }
     );
   }
 
   /**
-   * Método da funcionalidade de busca dos pokémons
+   * Método chamado pelo botão Pesquisar para realizar o filtro pelo nome do pokémon informado no campo de pesquisa.
    */
-  onSearch() {
+  public onSearch() {
     this.pokemonNotFound = false;
     this.pokemonName = this.pokemonNameSearch;
+    if (this.pokemonNameSearch) {
+      this.getPokemonByName();
+    } else {
+      this.getAllPokemons();
+    }
+  }
+
+  /**
+   * Método responsável por realizar a busca na API por um determinado pokémon
+   */
+  private getPokemonByName() {
     this.pokemonService.getPokemonByName(this.pokemonNameSearch).subscribe(
     (pokemon: any) => {
+      this.totalPokemons = pokemon.count;
       this.pokemons = [];
       this.pokemons.push({
         id: pokemon.id,
@@ -62,16 +81,24 @@ export class PokemonListComponent implements OnInit {
    * Método para formatar a url, devido a API do PokeAPI não retornar o id do pokémon
    * @param pokemon Pokémon que retornou na busca da API
    */
-  getPokemonId(pokemon) {
-    return pokemon.url.split('pokemon/')[1].replace('/', '');
+  private getPokemonId(pokemonUrl: string) {
+    return Number(pokemonUrl.split('pokemon/')[1].replace('/', ''));
   }
 
-  goToDetailsPage(pokemonId: string) {
+  /**
+   * Método responsável por redirecionar para a rota de detalhes do pokémon
+   * @param pokemonId Identificador do pokémon que o usuário selecionou para visualizar detalhes
+   */
+  public goToDetailsPage(pokemonId: number) {
     this.router.navigate(['details', pokemonId]);
   }
 
-  onPageChange(event: any) {
-    this.page = event;
+  /**
+   * Método responsável pela mudança da página no componente de paginação
+   * @param event Página que o usuário deseja visualizar
+   */
+  onPageChange(page: number) {
+    this.page = page;
     this.getAllPokemons();
   }
 }

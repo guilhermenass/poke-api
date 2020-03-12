@@ -1,32 +1,38 @@
 <div class="container">
   <div class="row mt-3">
-    <div class="col-md-3">
+    <div class="col-md-3 pokeapi-box-shadow">
       <div class="text-center">
-        <h1 class="pokeapi-title">{{pokemonDetails.name}} </h1>
+        <h1 class="pokeapi-title">{{pokemonDetails.name | titlecase }} </h1>
       </div>
       <div class="text-center">
         <img class="card-img-top img-fluid pokeapi-image" [src]="pokemonDetails.sprites.front_default" alt="Imagem do pokémon">
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 pokeapi-box-shadow">
       <h1 class="pokeapi-title">Características </h1>
       <h6 class="pokeapi-subtitle">Peso:</h6>
       <h4 class="pokeapi-subtitle">{{pokemonDetails.weight}}</h4>
       <h6 class="pokeapi-subtitle">Altura:</h6>
       <h4 class="pokeapi-subtitle">{{pokemonDetails.height}}</h4>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 pokeapi-box-shadow">
       <h1 class="pokeapi-title">Tipo </h1>
       <div *ngFor="let pokemonType of pokemonDetails.types" class="pokeapi-type">
         <div class="text-center"></div>
         <h4 class="pokeapi-subtitle">{{ pokemonType.type.name }}</h4>
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3 pokeapi-box-shadow">
       <h1 class="pokeapi-title">Habilidades </h1>
       <div *ngFor="let pokemonAbility of pokemonDetails.abilities" class="pokeapi-ability">
         <div class="text-center"></div>
         <h4 class="pokeapi-subtitle">{{ pokemonAbility.ability.name }}</h4>
+      </div>
+    </div>
+    <div class="col-md-3 pokeapi-box-shadow">
+      <h1 class="pokeapi-title">Estatísticas </h1>
+      <div *ngFor="let pokemonStats of pokemonDetails.stats">
+        <h6 class="pokeapi-subtitle">{{pokemonStats.stat.name}}: {{pokemonStats.base_stat}}</h6>
       </div>
     </div>
   </div>
