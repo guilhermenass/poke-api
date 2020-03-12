@@ -9,19 +9,25 @@ import { FormsModule } from '@angular/forms';
 import { PokemonDetailsComponent } from './pokemon-list/pokemon-details/pokemon-details.component';
 import { PokemonService } from './pokemon-list/pokemon-list.service';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PokemonListComponent,
-    PokemonDetailsComponent
+    PokemonDetailsComponent,
+    NotFoundComponent
   ],
   imports: [
     FormsModule,
     HttpClientModule,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgxSpinnerModule
   ],
   providers: [PokemonService],
   bootstrap: [AppComponent]

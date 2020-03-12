@@ -1,26 +1,40 @@
+import { PokemonDetails } from './../../shared/interfaces/pokemon-details/pokemon-details';
 import { Component, OnInit } from '@angular/core';
 import {  ActivatedRoute } from '@angular/router';
 import { PokemonService } from '../pokemon-list.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
   styleUrls: ['./pokemon-details.component.scss']
 })
+
 export class PokemonDetailsComponent implements OnInit {
 
-  public pokemonDetails: any;
+  public pokemonDetails: PokemonDetails;
 
-  constructor(private activatedRoute: ActivatedRoute, private pokemonService: PokemonService) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private pokemonService: PokemonService,
+    private ngxSpinner: NgxSpinnerService
+  ) {}
 
   ngOnInit(): void {
     const pokemonId = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadPokemonDetails(pokemonId);
+    this.loadPokemonDetails(Number(pokemonId));
   }
 
-  loadPokemonDetails(pokemonId: string) {
-    this.pokemonService.getPokemonDetails(pokemonId).subscribe(
-      (pokemonDetails: any) => {
+  private loadPokemonDetails(pokemonId: number) {
+    this.ngxSpinner.show();
+    this.pokemonService.getPokemonDetails(pokemonId)
+    .pipe(
+      finalize(() => {
+        this.ngxSpinner.hide();
+      })
+    )
+    .subscribe(
+      (pokemonDetails: PokemonDetails) => {
         this.pokemonDetails = pokemonDetails;
       }
     );

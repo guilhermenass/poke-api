@@ -1,27 +1,40 @@
-# PokeApi
+# Criação de página para listar e ver detalhes de todos os pokémons
+Foi desenvolvida uma aplicação Angular para consumir a API https://pokeapi.co/ com o objetivo de demonstrar habilidades e conhecimentos com Front-End.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.5.
+## Tecnologias utilizadas
+* Angular versão 9+
+* Bootstrap
+* Componentes npm (ngx-pagination, ngx-spinner)
+* Visual Studio Code
+* Postman para testes de API's
+* TSLint para padronização de código
 
-## Development server
+## Getting Started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Para iniciar, é necessário clonar este projeto em sua máquina e fazer alguns procedimentos para que a aplicação rode localmente.
 
-## Code scaffolding
+### Requisitos
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Como é uma aplicação Angular, é necessário ter instalado o Node.js, com uma versão atual ou que possua LTS.
 
-## Build
+### Instalação
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Clonar o repositório em sua máquina local, rodar o seguinte comando:
+```
+npm install
+```
+Após instalar as dependências com o npm install, rodar o comando:
+```
+ng serve
+```
+Por padrão, o Angular roda na porta 4200. Então, para acessar a aplicação basta digitar no seu browser: http://localhost:4200
 
-## Running unit tests
+## Conhecimentos
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Utilização de uma API nunca utilizada antes
+* Conhecimentos adquiridos de CSS
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Melhorias não implementadas
+* Funcionalidade de favoritar os pokémons
+* Testes e2e com protractor
+* Testes unitários com jasmine

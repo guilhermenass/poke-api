@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonService } from './pokemon-list.service';
+import { Pokemon } from '../shared/interfaces/pokemon';
+import { PokemonResponseDto } from '../shared/interfaces/pokemon-response-dto';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.scss']
 })
+
 export class PokemonListComponent implements OnInit {
 
-  public pokemons: any[];
+  public pokemons: Pokemon[];
   public pokemonNameSearch: string;
   private pokemonSpriteUrl = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
   public pokemonNotFound: boolean;
@@ -16,62 +21,77 @@ export class PokemonListComponent implements OnInit {
   public page = 1;
   public totalPokemons: number;
 
-  constructor(private pokemonService: PokemonService, private router: Router) { }
+  constructor(private pokemonService: PokemonService, private router: Router, private ngxSpinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.getAllPokemons();
   }
 
-  /**
-   * Método que carrega todos os pokémons sem filtros e com resultados paginados
-   */
-  getAllPokemons() {
-    this.pokemonService.getAllPokemons(this.page).subscribe(
-      (pokemons: any) => {
+  private getAllPokemons() {
+    this.ngxSpinner.show();
+    this.pokemonService.getAllPokemons(this.page)
+    .pipe(
+      finalize(() => {
+        this.ngxSpinner.hide();
+      })
+    )
+    .subscribe(
+      (pokemons: PokemonResponseDto) => {
         this.totalPokemons = pokemons.count;
-        this.pokemons = pokemons.results.map((pokemon) => ({
+        this.pokemons = [];
+        this.pokemons = pokemons.results.map((pokemon: Pokemon) => ({
           ...pokemon,
-          id: this.getPokemonId(pokemon),
-          sprite: `${this.pokemonSpriteUrl}/${this.getPokemonId(pokemon)}.png`
+          id: this.getPokemonId(pokemon.url),
+          sprite: `${this.pokemonSpriteUrl}/${this.getPokemonId(pokemon.url)}.png`
         }));
       }
     );
   }
 
-  /**
-   * Método da funcionalidade de busca dos pokémons
-   */
-  onSearch() {
+  public onSearch() {
     this.pokemonNotFound = false;
     this.pokemonName = this.pokemonNameSearch;
-    this.pokemonService.getPokemonByName(this.pokemonNameSearch).subscribe(
-    (pokemon: any) => {
-      this.pokemons = [];
-      this.pokemons.push({
-        id: pokemon.id,
-        sprite: pokemon.sprites.front_default,
-        name: pokemon.name
-      });
-    },
-    () => {
-      this.pokemonNotFound = true;
-    });
+    if (this.pokemonNameSearch) {
+      this.getPokemonByName();
+    } else {
+      this.getAllPokemons();
+    }
   }
 
-  /**
-   * Método para formatar a url, devido a API do PokeAPI não retornar o id do pokémon
-   * @param pokemon Pokémon que retornou na busca da API
-   */
-  getPokemonId(pokemon) {
-    return pokemon.url.split('pokemon/')[1].replace('/', '');
+  private getPokemonByName() {
+    this.ngxSpinner.show();
+    this.pokemonService.getPokemonByName(this.pokemonNameSearch)
+    .pipe(
+      finalize(() => {
+        this.ngxSpinner.hide();
+      })
+    )
+    .subscribe(
+      (pokemon: any) => {
+        this.totalPokemons = pokemon.count;
+        this.pokemons = [];
+        this.pokemons.push({
+          id: pokemon.id,
+          sprite: pokemon.sprites.front_default,
+          name: pokemon.name
+        });
+      },
+      () => {
+        this.pokemonNotFound = true;
+      }
+    );
   }
 
-  goToDetailsPage(pokemonId: string) {
+  private getPokemonId(pokemonUrl: string) {
+    return Number(pokemonUrl.split('pokemon/')[1].replace('/', ''));
+  }
+
+  public goToDetailsPage(pokemonId: number) {
     this.router.navigate(['details', pokemonId]);
   }
 
-  onPageChange(event: any) {
-    this.page = event;
+  public onPageChange(page: number) {
+    this.page = page;
     this.getAllPokemons();
   }
 }
